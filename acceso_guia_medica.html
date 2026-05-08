@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Guía Médica | Plan Médico Francés</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    body,*{-webkit-user-select:none!important;-moz-user-select:none!important;user-select:none!important;}
+    @media print{body{display:none!important;}}
+  </style>
+  <script>
+  (function(){
+    document.addEventListener('contextmenu',function(e){e.preventDefault();return false;});
+    document.addEventListener('keydown',function(e){
+      if(e.keyCode===123){e.preventDefault();return false;}
+      if(e.ctrlKey&&['u','U','s','S','p','P','a','A','c','C','x','X'].includes(e.key)){e.preventDefault();return false;}
+      if(e.ctrlKey&&e.shiftKey&&['i','I','j','J','c','C','k','K'].includes(e.key)){e.preventDefault();return false;}
+    });
+    document.addEventListener('dragstart',function(e){e.preventDefault();return false;});
+    window.addEventListener('beforeprint',function(e){e.preventDefault();});
+    setInterval(function(){
+      if(window.outerWidth-window.innerWidth>160||window.outerHeight-window.innerHeight>160){
+        document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:12px;font-family:Arial;color:#c0392b;"><span style="font-size:3rem">🔒</span><strong>Cerrá las herramientas de desarrollador para continuar.</strong></div>';
+      }
+    },1000);
+  })();
+  </script>
+
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --azul:#1B3D8F; --azul-oscuro:#142d6b; --rojo:#e63946;
+      --verde:#1a7a4a; --gris:#f0f4f8; --gris-borde:#dde3ef;
+      --texto:#222; --texto-suave:#6b7280;
+    }
+    html{scroll-behavior:smooth;}
+    body{font-family:'Inter',sans-serif;background:var(--gris);color:var(--texto);min-height:100vh;}
+
+    /* ═══ LOGIN ═══ */
+    #pantalla-login{
+      min-height:100vh; display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(135deg,var(--azul-oscuro) 0%,var(--azul) 60%,#2563eb 100%);
+      padding:24px; position:relative; overflow:hidden;
+    }
+    #pantalla-login::before{
+      content:''; position:absolute; inset:0;
+      background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .login-card{
+      background:#fff; border-radius:24px; padding:52px 48px;
+      max-width:480px; width:100%;
+      box-shadow:0 24px 64px rgba(0,0,0,.22);
+      position:relative; z-index:2; text-align:center;
+    }
+    .login-logo{margin-bottom:28px;}
+    .login-logo img{height:60px;width:auto;object-fit:contain;}
+    .login-card h2{font-size:1.4rem;font-weight:800;color:var(--azul-oscuro);margin-bottom:8px;}
+    .login-card>p{color:var(--texto-suave);font-size:0.9rem;line-height:1.6;margin-bottom:32px;}
+    .input-wrap{position:relative;margin-bottom:14px;}
+    .input-wrap i{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--texto-suave);font-size:1rem;}
+    .input-wrap input{
+      width:100%; padding:15px 16px 15px 44px;
+      border:2px solid var(--gris-borde); border-radius:12px;
+      font-size:1.05rem; font-family:inherit; outline:none;
+      transition:border .2s; letter-spacing:1px;
+      -webkit-user-select:text!important; user-select:text!important;
+    }
+    .input-wrap input:focus{border-color:var(--azul);}
+    .btn-verificar{
+      width:100%; background:var(--azul); color:#fff;
+      padding:15px; border-radius:12px; border:none;
+      font-size:1rem; font-weight:700; cursor:pointer;
+      font-family:inherit; transition:background .2s;
+      display:flex; align-items:center; justify-content:center; gap:8px; margin-top:8px;
+    }
+    .btn-verificar:hover{background:var(--azul-oscuro);}
+    .btn-verificar:disabled{background:#9ca3af;cursor:not-allowed;}
+    .error-msg{
+      display:none; background:#fef2f2; border:1px solid #fca5a5;
+      color:#991b1b; border-radius:10px; padding:12px 16px;
+      font-size:0.85rem; margin-top:14px; text-align:left;
+    }
+    .error-msg.visible{display:flex;align-items:center;gap:8px;}
+    .loading-dots{display:none;}
+    .loading-dots.visible{display:inline-flex;gap:4px;}
+    .loading-dots span{width:6px;height:6px;background:#fff;border-radius:50%;animation:bounce 1.2s infinite;}
+    .loading-dots span:nth-child(2){animation-delay:.2s;}
+    .loading-dots span:nth-child(3){animation-delay:.4s;}
+    @keyframes bounce{0%,80%,100%{transform:scale(0)}40%{transform:scale(1)}}
+    .login-footer{margin-top:28px;font-size:0.78rem;color:var(--texto-suave);}
+    .login-footer strong{color:var(--azul);}
+
+    /* ═══ PANTALLA GUÍA ═══ */
+    #pantalla-guia{display:none;flex-direction:column;min-height:100vh;}
+    .guia-header{
+      background:var(--azul);color:#fff;
+      padding:14px 28px; display:flex; align-items:center; gap:16px;
+      position:sticky; top:0; z-index:100;
+      box-shadow:0 2px 12px rgba(0,0,0,.2);
+    }
+    .guia-header img{height:38px;width:auto;object-fit:contain;}
+    .guia-header .header-info h3{font-size:0.95rem;font-weight:700;}
+    .guia-header .header-info span{font-size:0.78rem;opacity:.8;}
+    .btn-salir{
+      margin-left:auto; background:rgba(255,255,255,.15);
+      border:1px solid rgba(255,255,255,.3); color:#fff;
+      padding:8px 18px; border-radius:20px; cursor:pointer;
+      font-size:0.82rem; font-weight:600; font-family:inherit;
+      display:flex; align-items:center; gap:6px; transition:background .2s;
+    }
+    .btn-salir:hover{background:rgba(255,255,255,.25);}
+    .guia-bienvenida{
+      background:linear-gradient(135deg,var(--azul-oscuro),var(--azul));
+      color:#fff; padding:32px 40px;
+      display:flex; align-items:center; gap:20px; flex-wrap:wrap;
+    }
+    .guia-bienvenida .icon-wrap{
+      background:rgba(255,255,255,.15); border-radius:16px;
+      width:64px; height:64px; display:grid; place-items:center;
+      font-size:1.8rem; flex-shrink:0;
+    }
+    .guia-bienvenida .info h2{font-size:1.3rem;font-weight:800;margin-bottom:4px;}
+    .guia-bienvenida .info p{opacity:.85;font-size:0.9rem;line-height:1.6;}
+    .plan-badge-display{
+      margin-left:auto; background:rgba(255,255,255,.15);
+      border:1px solid rgba(255,255,255,.3);
+      padding:10px 20px; border-radius:12px; text-align:center; flex-shrink:0;
+    }
+    .plan-badge-display .plan-label{font-size:.7rem;opacity:.75;text-transform:uppercase;letter-spacing:1px;}
+    .plan-badge-display .plan-nombre{font-size:1rem;font-weight:800;margin-top:2px;}
+
+    /* Tabs de guías */
+    .guia-tabs-bar{
+      background:#fff; border-bottom:2px solid var(--gris-borde);
+      padding:0 40px; display:flex; gap:4px; overflow-x:auto;
+    }
+    .guia-tab{
+      background:none; border:none; cursor:pointer; font-family:inherit;
+      padding:14px 20px; font-size:0.88rem; font-weight:600;
+      color:var(--texto-suave); border-bottom:3px solid transparent;
+      transition:.15s; white-space:nowrap; display:flex; align-items:center; gap:8px;
+    }
+    .guia-tab:hover{color:var(--azul);}
+    .guia-tab.active{color:var(--azul);border-bottom-color:var(--azul);}
+    .guia-tab .tab-badge{
+      background:#e8f0fe; color:var(--azul);
+      font-size:.7rem; padding:2px 8px; border-radius:10px; font-weight:700;
+    }
+    .guia-tab.active .tab-badge{background:var(--azul);color:#fff;}
+
+    .guia-contenido{flex:1;padding:28px 40px;max-width:1100px;width:100%;margin:0 auto;}
+    .guia-panel{display:none;}
+    .guia-panel.active{display:block;}
+    .guia-iframe-wrap{
+      background:#fff; border-radius:16px;
+      border:1px solid var(--gris-borde); overflow:hidden;
+      box-shadow:0 4px 24px rgba(0,0,0,.07); min-height:65vh;
+    }
+    .guia-iframe-wrap iframe{width:100%;border:none;min-height:65vh;display:block;}
+
+    .plan-no-encontrado{
+      text-align:center; padding:60px 24px;
+      background:#fff; border-radius:16px; border:1px solid var(--gris-borde);
+    }
+    .plan-no-encontrado i{font-size:3rem;color:#d1d5db;margin-bottom:16px;display:block;}
+    .plan-no-encontrado h3{font-size:1.1rem;font-weight:700;color:var(--azul-oscuro);margin-bottom:8px;}
+    .plan-no-encontrado p{color:var(--texto-suave);font-size:.9rem;}
+
+    .guia-footer{
+      background:var(--azul-oscuro);color:rgba(255,255,255,.6);
+      padding:16px 40px;font-size:.78rem;text-align:center;
+    }
+
+    @media(max-width:600px){
+      .login-card{padding:36px 24px;}
+      .guia-bienvenida{flex-direction:column;padding:24px;}
+      .plan-badge-display{margin-left:0;}
+      .guia-contenido{padding:20px 16px;}
+      .guia-tabs-bar{padding:0 16px;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- PANTALLA LOGIN -->
+<div id="pantalla-login">
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="https://planmedicofrances.com.py/wp-content/uploads/2025/01/logo.png" alt="Plan Médico Francés"/>
+    </div>
+    <h2>Acceso a Guía Médica</h2>
+    <p>Ingresá tu número de Cédula de Identidad para acceder a la guía médica de tu plan.</p>
+    <div class="input-wrap">
+      <i class="fa-solid fa-id-card"></i>
+      <input type="text" id="input-ci" placeholder="Ej: 1234567" maxlength="10"
+        inputmode="numeric" autocomplete="off"
+        onkeypress="soloNumeros(event)"
+        onkeydown="if(event.key==='Enter') verificarCI()"/>
+    </div>
+    <button class="btn-verificar" id="btn-verificar" onclick="verificarCI()">
+      <span id="btn-texto"><i class="fa-solid fa-shield-check"></i> Verificar CI</span>
+      <span class="loading-dots" id="loading"><span></span><span></span><span></span></span>
+    </button>
+    <div class="error-msg" id="error-msg">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <span id="error-texto">Cédula no encontrada.</span>
+    </div>
+    <div class="login-footer">
+      <strong>Plan Médico Francés</strong> · Solo para asegurados activos<br/>
+      ¿Problemas? Contactá al <strong>(021) 000-000</strong>
+    </div>
+  </div>
+</div>
+
+<!-- PANTALLA GUÍA -->
+<div id="pantalla-guia">
+  <div class="guia-header">
+    <img src="https://planmedicofrances.com.py/wp-content/uploads/2025/01/logo.png" alt="PMF" style="filter:brightness(0) invert(1);"/>
+    <div class="header-info">
+      <h3>Guía Médica 2026</h3>
+      <span id="header-label">–</span>
+    </div>
+    <button class="btn-salir" onclick="cerrarSesion()">
+      <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+    </button>
+  </div>
+
+  <div class="guia-bienvenida">
+    <div class="icon-wrap">🏥</div>
+    <div class="info">
+      <h2>Bienvenido/a, <span id="nombre-asegurado">—</span></h2>
+      <p>Accedé a todas las guías médicas disponibles para tu plan.</p>
+    </div>
+    <div class="plan-badge-display">
+      <div class="plan-label">Tu plan</div>
+      <div class="plan-nombre" id="nombre-plan-display">—</div>
+    </div>
+  </div>
+
+  <!-- TABS dinámicas -->
+  <div class="guia-tabs-bar" id="guia-tabs-bar"></div>
+
+  <div class="guia-contenido" id="guia-contenido"></div>
+
+  <div class="guia-footer">
+    © 2026 Plan Médico Francés · Documento confidencial para uso exclusivo del asegurado · No reproducir
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+//  CONFIGURACIÓN DE GUÍAS POR PLAN
+//  Cada plan puede tener UNA o MÚLTIPLES guías (tabs)
+// ═══════════════════════════════════════════════════════════
+const GUIAS_POR_PLAN = {
+  "Plan Francar": [
+    { tab: "Guía Médica General",  icono: "fa-book-medical",   archivo: "GuiaMedica2026.html" },
+    { tab: "Red de Emergencias",   icono: "fa-truck-medical",  archivo: "GuiaMedica2026.html" },
+    { tab: "Laboratorios",         icono: "fa-flask",          archivo: "GuiaMedica2026.html" },
+  ],
+  "Planes Empresariales": [
+    { tab: "Guía Médica General",  icono: "fa-book-medical",   archivo: "GuiaMedica2026.html" },
+    { tab: "Cobertura Corporativa",icono: "fa-building",       archivo: "GuiaMedica2026.html" },
+  ],
+  "Plan a Definir": [
+    { tab: "Guía Médica",          icono: "fa-book-medical",   archivo: null },
+  ],
+};
+
+// ═══════════════════════════════════════════════════════════
+//  FUNCIONES
+// ═══════════════════════════════════════════════════════════
+function soloNumeros(e){
+  if(!/[0-9]/.test(String.fromCharCode(e.charCode))) e.preventDefault();
+}
+
+function verificarCI(){
+  const ci = document.getElementById('input-ci').value.trim().replace(/[.-]/g,'');
+  const errorEl  = document.getElementById('error-msg');
+  const loadEl   = document.getElementById('loading');
+  const btnTexto = document.getElementById('btn-texto');
+  const btn      = document.getElementById('btn-verificar');
+
+  errorEl.classList.remove('visible');
+  if(!ci || ci.length < 5){
+    mostrarError('Ingresá un número de cédula válido (mínimo 5 dígitos).');
+    return;
+  }
+
+  btn.disabled = true;
+  btnTexto.style.display = 'none';
+  loadEl.classList.add('visible');
+
+  // Llamada al backend PHP
+  fetch('verificar.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'ci=' + encodeURIComponent(ci)
+  })
+  .then(function(res){ return res.json(); })
+  .then(function(data){
+    btn.disabled = false;
+    btnTexto.style.display = 'flex';
+    loadEl.classList.remove('visible');
+
+    if(data.ok){
+      mostrarGuia(ci, data);
+    } else {
+      mostrarError(data.mensaje || 'Cédula no encontrada. Contactá con nosotros.');
+    }
+  })
+  .catch(function(){
+    btn.disabled = false;
+    btnTexto.style.display = 'flex';
+    loadEl.classList.remove('visible');
+    mostrarError('Error de conexión. Intentá de nuevo.');
+  });
+}
+
+function mostrarError(msg){
+  document.getElementById('error-texto').textContent = msg;
+  document.getElementById('error-msg').classList.add('visible');
+  document.getElementById('input-ci').focus();
+}
+
+function mostrarGuia(ci, data){
+  document.getElementById('header-label').textContent = 'CI: ' + ci + '  ·  Plan: ' + data.plan;
+  document.getElementById('nombre-asegurado').textContent = data.nombre;
+  document.getElementById('nombre-plan-display').textContent = data.plan;
+
+  const guias = GUIAS_POR_PLAN[data.plan] || [{ tab:'Guía Médica', icono:'fa-book-medical', archivo: null }];
+
+  // Construir tabs
+  const tabsBar    = document.getElementById('guia-tabs-bar');
+  const contenido  = document.getElementById('guia-contenido');
+  tabsBar.innerHTML   = '';
+  contenido.innerHTML = '';
+
+  guias.forEach(function(g, idx){
+    // Tab button
+    const btn = document.createElement('button');
+    btn.className = 'guia-tab' + (idx===0 ? ' active' : '');
+    btn.innerHTML = '<i class="fa-solid ' + g.icono + '"></i> ' + g.tab + ' <span class="tab-badge">' + (idx+1) + '</span>';
+    btn.onclick = function(){ activarTab(idx); };
+    tabsBar.appendChild(btn);
+
+    // Panel
+    const panel = document.createElement('div');
+    panel.className = 'guia-panel' + (idx===0 ? ' active' : '');
+    panel.id = 'panel-' + idx;
+
+    if(g.archivo){
+      panel.innerHTML = '<div class="guia-iframe-wrap"><iframe src="' + g.archivo + '" scrolling="yes" sandbox="allow-same-origin allow-scripts"></iframe></div>';
+    } else {
+      panel.innerHTML = '<div class="plan-no-encontrado"><i class="fa-solid fa-file-circle-question"></i><h3>Guía en preparación</h3><p>Esta guía médica está siendo preparada. Contactá con nosotros para más información.</p></div>';
+    }
+    contenido.appendChild(panel);
+  });
+
+  document.getElementById('pantalla-login').style.display = 'none';
+  const guiaEl = document.getElementById('pantalla-guia');
+  guiaEl.style.display = 'flex';
+  document.getElementById('input-ci').value = '';
+}
+
+function activarTab(idx){
+  document.querySelectorAll('.guia-tab').forEach(function(t,i){
+    t.classList.toggle('active', i===idx);
+  });
+  document.querySelectorAll('.guia-panel').forEach(function(p,i){
+    p.classList.toggle('active', i===idx);
+  });
+}
+
+function cerrarSesion(){
+  document.getElementById('pantalla-guia').style.display = 'none';
+  document.getElementById('pantalla-login').style.display = 'flex';
+  document.getElementById('guia-tabs-bar').innerHTML = '';
+  document.getElementById('guia-contenido').innerHTML = '';
+}
+</script>
+</body>
+</html>
