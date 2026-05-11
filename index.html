@@ -58,10 +58,11 @@
       position: fixed; top: 37px; width: 100%; z-index: 1000;
       background: var(--azul);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 6%; height: 68px;
+      padding: 0 6%; height: 76px;
       box-shadow: 0 2px 20px rgba(10,36,99,0.25);
+      border-bottom: 1px solid rgba(255,255,255,0.15);
     }
-    .nav-logo img { height: 50px; width: auto; object-fit: contain; }
+    .nav-logo img { height: 62px; width: auto; object-fit: contain; }
     .nav-links { display: flex; gap: 32px; list-style: none; }
     .nav-links a {
       color: rgba(255,255,255,0.8); text-decoration: none;
@@ -84,7 +85,7 @@
     .nav-cta:hover { background: var(--rojo-vivo); transform: translateY(-1px); }
 
     /* ── HERO ── */
-    #hero { margin-top: 105px; position: relative; height: calc(100vh - 105px); overflow: hidden; }
+    #hero { margin-top: 113px; position: relative; height: calc(100vh - 113px); overflow: hidden; }
     .hero-bg {
       position: absolute; inset: 0;
       background-size: cover; background-position: center;
@@ -155,6 +156,9 @@
     .stat-item .num {
       font-size: 2.4rem; font-weight: 900; color: var(--dorado);
       display: block; line-height: 1; letter-spacing: -1px;
+    }
+    .stat-item .num[data-small] {
+      font-size: 1.1rem; letter-spacing: 0;
     }
     .stat-item .lbl { color: rgba(255,255,255,0.65); font-size: 0.75rem; margin-top: 5px; }
 
@@ -681,7 +685,7 @@
     <li><a href="#cobertura">Cobertura</a></li>
     <li><a href="#contacto">Contacto</a></li>
   </ul>
-  <button onclick="abrirModal()" class="nav-cta" style="border:none;cursor:pointer;">Acceso a Guías Médicas</button>
+  <button onclick="abrirModal()" class="nav-cta" style="border:none;cursor:pointer;font-family:inherit;">Acceso a Guías Médicas</button>
 </nav>
 
 <!-- HERO -->
@@ -701,10 +705,10 @@
     <div class="hero-card">
       <h3>Nuestros números</h3>
       <div class="stat-grid">
-        <div class="stat-item"><span class="num">29+</span><span class="lbl">Años de experiencia</span></div>
         <div class="stat-item"><span class="num">24/7</span><span class="lbl">Ambulancia disponible</span></div>
-        <div class="stat-item"><span class="num">100%</span><span class="lbl">Cobertura garantizada</span></div>
-        <div class="stat-item"><span class="num">3</span><span class="lbl">Zonas de cobertura</span></div>
+        <div class="stat-item"><span class="num" style="font-size:2rem;letter-spacing:0;">🇵🇾</span><span class="lbl">Cobertura Nacional</span></div>
+        <div class="stat-item"><span class="num" style="font-size:2rem;letter-spacing:0;">🌍</span><span class="lbl">Cobertura Internacional</span></div>
+        <div class="stat-item"><span class="num" style="font-size:1.3rem;letter-spacing:0;">Desde 1996</span><span class="lbl">De mayor trayectoria del PY</span></div>
       </div>
     </div>
   </div>
