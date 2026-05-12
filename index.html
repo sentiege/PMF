@@ -656,6 +656,18 @@
 }
 .modal-error.show { display: block; }
 
+
+    /* ===== PROTECCIÓN DE CONTENIDO ===== */
+    .guia-content, .guia-frame, #guia-container, .modal-guia, body {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    @media print {
+      body { display: none !important; }
+    }
+
 </style>
 </head>
 <body>
@@ -2102,5 +2114,37 @@ function verificarModalCI() {
 }
 
 </script>
+
+  <!-- PROTECCIÓN DE CONTENIDO -->
+  <script>
+    // Bloquear click derecho
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; });
+
+    // Bloquear selección de texto
+    document.addEventListener('selectstart', function(e) { e.preventDefault(); return false; });
+
+    // Bloquear drag
+    document.addEventListener('dragstart', function(e) { e.preventDefault(); return false; });
+
+    // Bloquear copy/cut
+    document.addEventListener('copy', function(e) { e.preventDefault(); return false; });
+    document.addEventListener('cut', function(e) { e.preventDefault(); return false; });
+
+    // Bloquear Ctrl+C, Ctrl+P, Ctrl+S, Ctrl+U, F12, Ctrl+Shift+I, Ctrl+Shift+J
+    document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey && ['c','C','p','P','s','S','u','U','a','A'].includes(e.key)) {
+        e.preventDefault(); return false;
+      }
+      if (e.key === 'F12') { e.preventDefault(); return false; }
+      if (e.ctrlKey && e.shiftKey && ['i','I','j','J','c','C'].includes(e.key)) {
+        e.preventDefault(); return false;
+      }
+    });
+
+    // Bloquear impresión
+    window.addEventListener('beforeprint', function(e) { e.preventDefault(); });
+    window.onbeforeprint = function() { return false; };
+  </script>
+
 </body>
 </html>
