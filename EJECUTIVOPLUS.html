@@ -257,6 +257,23 @@ a.ph:hover{text-decoration:underline;}
 .nr-icon{font-size:48px;margin-bottom:12px;display:block;}
 .nr-title{font-size:16px;font-weight:700;color:#1B3D8F;margin-bottom:6px;}
 .nr-sub{font-size:13px;color:#999;}
+
+/* ---- SPINNER DE CARGA ---- */
+#page-loader{position:fixed;inset:0;background:#fff;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+#page-loader .spinner{width:48px;height:48px;border:5px solid #e8eef8;border-top-color:#1B3D8F;border-radius:50%;animation:spin .8s linear infinite;}
+#page-loader .loader-txt{font-size:13px;color:#1B3D8F;font-weight:600;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ---- BOTÓN VOLVER ARRIBA ---- */
+#btn-top{position:fixed;bottom:90px;right:18px;width:44px;height:44px;background:#1B3D8F;color:#fff;border:none;border-radius:50%;font-size:22px;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(27,61,143,.35);z-index:300;transition:opacity .2s;}
+#btn-top:hover{background:#142d6b;}
+#btn-top.visible{display:flex;}
+
+/* ---- BADGES CON ÍCONOS ---- */
+.bCT{background:#d4edda;color:#155724;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:3px;}
+.bCSP{background:#fff3cd;color:#856404;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:3px;}
+.bSP{background:#cce5ff;color:#004085;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:3px;}
+.bC{background:#e8eef8;color:#1B3D8F;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:3px;}
 </style>
 <style>
 *{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}
@@ -336,7 +353,7 @@ document.addEventListener('keydown',function(e){
     <div class="filters">
       <div>
         <label>Departamento</label>
-        <select id="fd" onchange="af()">
+        <select id="fd" onchange="af()" onchange="af()">
           <option value="">Todos los departamentos</option>
 <option value="DEPARTAMENTO CENTRAL">DEPARTAMENTO CENTRAL</option>
 <option value="DEPARTAMENTO DE ALTO PARANA">DEPARTAMENTO DE ALTO PARANA</option>
@@ -357,7 +374,7 @@ document.addEventListener('keydown',function(e){
       </div>
       <div>
         <label>Especialidad</label>
-        <select id="fs" onchange="af()">
+        <select id="fs" onchange="af()" onchange="af()">
           <option value="">Todas las especialidades</option>
 <option value="ALERGIA E INMUNOLOGIA ADULTOS">ALERGIA E INMUNOLOGIA ADULTOS</option>
 <option value="ALERGIA E INMUNOLOGIA PEDIATRICA">ALERGIA E INMUNOLOGIA PEDIATRICA</option>
@@ -635,6 +652,12 @@ function claseBadge(s){
   if(s==='CSP')return 'bCSP';
   if(s==='SP')return 'bSP';
   return 'bC';
+}
+function labelBadge(s){
+  if(s==='CT')return '✓ CT';
+  if(s==='CSP')return '~ CSP';
+  if(s==='SP')return '✗ SP';
+  return '· '+s;
 }
 
 function renderizar(){
@@ -1160,5 +1183,23 @@ function inicializarBarraScroll(){
   <strong>Plan Médico Francés</strong> &nbsp;·&nbsp; Guía Médica 2026 &nbsp;·&nbsp; Uso exclusivo para afiliados<br>
   © 2026 Plan Médico Francés. Todos los derechos reservados.
 </div>
+<script>
+// Spinner: ocultar cuando carga
+window.addEventListener('load', function(){
+  var loader = document.getElementById('page-loader');
+  if(loader) loader.style.display='none';
+});
+
+// Botón volver arriba
+window.addEventListener('scroll', function(){
+  var btn = document.getElementById('btn-top');
+  if(!btn) return;
+  if(window.scrollY > 300) btn.classList.add('visible');
+  else btn.classList.remove('visible');
+});
+document.getElementById('btn-top') && document.getElementById('btn-top').addEventListener('click', function(){
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+</script>
 </body>
 </html>
